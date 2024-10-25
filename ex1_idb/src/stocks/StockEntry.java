@@ -18,7 +18,13 @@ public class StockEntry {
 
     public StockEntry(ByteBuffer bb) {
         // TODO
-        this(0,"",0,0);
+        this.id = bb.getInt();
+        int nameLength = bb.getInt();
+        byte [] nameBytes = new byte[nameLength];
+        bb.get(nameBytes);
+        this.name = new String(nameBytes, StandardCharsets.UTF_8);
+        this.ts = bb.getLong();
+        this.value = bb.getDouble();
     }
 
     public long getId() {
@@ -48,7 +54,20 @@ public class StockEntry {
 
     public ByteBuffer getBytes() {
         // TODO
-        return null;
+        byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
+        // Accounts for ID, name length, and timestamp (each 4 bytes).
+        int size = Integer.BYTES * 3 + Double.BYTES + nameBytes.length;
+
+        ByteBuffer bb = ByteBuffer.allocate(size);
+
+        bb.putInt((int) id);
+        bb.putInt(nameBytes.length);
+        bb.put(nameBytes);
+        bb.putInt((int) ts);
+        bb.putDouble(value);
+
+        bb.flip();
+        return bb;
     }
 
     public boolean equals(Object obj) {
