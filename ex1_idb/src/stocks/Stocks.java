@@ -13,12 +13,6 @@ import java.util.*;
  */
 public class Stocks implements Iterable<StockEntry> {
 
-    private static final int ID_SIZE = 8;
-    private static final int NAME_LENGTH_SIZE = 2;
-    private static final int TIMESTAMP_SIZE = 8;
-    private static final int VALUE_SIZE = 8;
-    private static final int RECORD_SIZE = ID_SIZE + NAME_LENGTH_SIZE + TIMESTAMP_SIZE + VALUE_SIZE;
-
     private final RandomAccessFile file;
 
     /**
@@ -46,8 +40,8 @@ public class Stocks implements Iterable<StockEntry> {
             int ind = 0;
 
             while (ind <= i) {
-                ByteBuffer bb = ByteBuffer.allocate(RECORD_SIZE);
-                file.read(bb.array(), 0, ID_SIZE + NAME_LENGTH_SIZE); // read number of bytes for id and name length
+                ByteBuffer bb = ByteBuffer.allocate(Configuration.RECORD_SIZE);
+                file.read(bb.array(), 0, Configuration.ID_SIZE + Configuration.NAME_LENGTH_SIZE); // read number of bytes for id and name length
                 bb.position(0); // reset position
 
                 long id = bb.getLong(); // read id
@@ -57,8 +51,8 @@ public class Stocks implements Iterable<StockEntry> {
                 file.read(nameBytes); // read name
                 String name = new String(nameBytes, StandardCharsets.UTF_8);
 
-                bb = ByteBuffer.allocate(8 + 8); // allocate buffer for ts and value
-                file.read(bb.array(), 0, 8 + 8); // read number of bytes for timestamp and value
+                bb = ByteBuffer.allocate(Configuration.TIMESTAMP_SIZE + Configuration.VALUE_SIZE); // allocate buffer for ts and value
+                file.read(bb.array(), 0, Configuration.TIMESTAMP_SIZE + Configuration.VALUE_SIZE); // read number of bytes for timestamp and value
                 bb.position(0); // reset position
 
                 long ts = bb.getLong(); // read timestamp
