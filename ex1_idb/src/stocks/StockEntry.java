@@ -9,7 +9,7 @@ public class StockEntry {
     private final long ts;
     private final double value;
 
-    public StockEntry(long id, String name, int timestamp, double market_value) {
+    public StockEntry(long id, String name, long timestamp, double market_value) {
         this.id = id;
         this.name = name;
         this.ts = timestamp;
@@ -19,7 +19,7 @@ public class StockEntry {
     public StockEntry(ByteBuffer bb) {
         // TODO
         this.id = bb.getInt();
-        int nameLength = bb.getInt();
+        short nameLength = bb.getShort();
         byte [] nameBytes = new byte[nameLength];
         bb.get(nameBytes);
         this.name = new String(nameBytes, StandardCharsets.UTF_8);
@@ -60,10 +60,10 @@ public class StockEntry {
 
         ByteBuffer bb = ByteBuffer.allocate(size);
 
-        bb.putInt((int) id);
-        bb.putInt(nameBytes.length);
+        bb.putLong(id);
+        bb.putShort((short)nameBytes.length);
         bb.put(nameBytes);
-        bb.putInt((int) ts);
+        bb.putLong(ts);
         bb.putDouble(value);
 
         bb.flip();
