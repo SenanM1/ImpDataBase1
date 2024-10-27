@@ -210,7 +210,7 @@ public class SimpleFileContainer<Value> implements Container<Long, Value> {
         }
     }
 
-    private void validateKey(Long key) throws IllegalArgumentException {
+    private void validateKey(Long key) throws IllegalArgumentException, NoSuchElementException {
         if (key == null) {
             throw new IllegalArgumentException("Key cannot be null");
         }
