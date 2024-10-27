@@ -3,22 +3,42 @@ package stocks;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Represents a stock entry with an ID, name, timestamp, and market value.
+ */
 public class StockEntry {
     private final long id;
     private final String name;
     private final long ts;
     private final double value;
 
+    /**
+     * Constructs a StockEntry with the specified parameters.
+     *
+     * @param id the ID of the stock entry
+     * @param name the name of the stock
+     * @param timestamp the timestamp of the stock entry
+     * @param market_value the market value of the stock
+     * @throws IllegalArgumentException if the name is null or empty
+     */
     public StockEntry(long id, String name, long timestamp, double market_value) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
         this.id = id;
         this.name = name;
         this.ts = timestamp;
         this.value = market_value;
     }
 
+    /**
+     * Constructs a StockEntry from the ByteBuffer.
+     *
+     * @param bb the ByteBuffer containing the stock entry data
+     */
     public StockEntry(ByteBuffer bb) {
         // TODO
-        this.id = bb.getInt();
+        this.id = bb.getLong();
         short nameLength = bb.getShort();
         byte [] nameBytes = new byte[nameLength];
         bb.get(nameBytes);
@@ -52,21 +72,25 @@ public class StockEntry {
         return id + " " + name + " " + ts + " " + value;
     }
 
+    /**
+     * Converts the StockEntry to a ByteBuffer.
+     *
+     * @return the ByteBuffer containing the stock entry data
+     */
     public ByteBuffer getBytes() {
         // TODO
-        byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
-        // Accounts for ID, name length, and timestamp (each 4 bytes).
-        int size = Integer.BYTES * 3 + Double.BYTES + nameBytes.length;
+        byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8); // get name bytes
+        int totalSize = Configuration.RECORD_SIZE + nameBytes.length; // total size of the record with the name string
 
-        ByteBuffer bb = ByteBuffer.allocate(size);
+        ByteBuffer bb = ByteBuffer.allocate(totalSize);
 
-        bb.putLong(id);
+        bb.putLong(this.id);
         bb.putShort((short)nameBytes.length);
         bb.put(nameBytes);
-        bb.putLong(ts);
-        bb.putDouble(value);
+        bb.putLong(this.ts);
+        bb.putDouble(this.value);
 
-        bb.flip();
+        bb.flip(); // switch to read mode
         return bb;
     }
 
