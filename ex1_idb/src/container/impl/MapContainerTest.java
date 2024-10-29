@@ -13,7 +13,7 @@ public class MapContainerTest {
      * Tests whether the getMetaData method returns correct value.
      */
     @Test
-    void getMetaDataTest() {
+    void testGetMetaData() {
         MapContainer<Integer> mapContainer = new MapContainer<>();
         assertEquals(mapContainer.getMetaData().getIntProperty("size"), 0);
 
@@ -27,7 +27,7 @@ public class MapContainerTest {
      * Tests whether the reserve method creates a new key and saves it.
      */
     @Test
-    void reserveTest() {
+    void testReserve() {
         MapContainer<Integer> mapContainer = new MapContainer<>();
         assertEquals(mapContainer.reserve(), 0L);
         assertEquals(mapContainer.reserve(), 1L);
@@ -38,7 +38,7 @@ public class MapContainerTest {
      * Tests whether the get method return a corresponding value to the key.
      */
     @Test
-    void getTest() {
+    void testGet() {
         MapContainer<Integer> mapContainer = new MapContainer<>();
         mapContainer.reserve();
         mapContainer.reserve();
@@ -57,7 +57,7 @@ public class MapContainerTest {
      * Tests whether the update method actually updates the value for the given key in the map.
      */
     @Test
-    void updateTest() {
+    void testUpdate() {
         MapContainer<Integer> mapContainer = new MapContainer<>();
         mapContainer.reserve();
         mapContainer.reserve();
@@ -76,7 +76,7 @@ public class MapContainerTest {
      * Tests whether the remove method removes the specified key from the map.
      */
     @Test
-    void removeTest() {
+    void testRemove() {
         MapContainer<Integer> mapContainer = new MapContainer<>();
         mapContainer.reserve();
         mapContainer.reserve();
